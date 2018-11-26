@@ -11,7 +11,7 @@ export async function main(ns) {
         var box = serverNameList[s];
         var ram = ns.getServerRam(box);
         var maxRam = ram[0];
-        var currentRam = ram[0] - ram[1];
+        var currentRam = Math.round(ram[0] - ram[1]);
         var cost = maxRam * ramCostConstant;
         ns.tprint(box + " Ram: " + currentRam + " / " + maxRam + " --==-- Cost: $" + cost);
     }

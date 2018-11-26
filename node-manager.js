@@ -13,7 +13,8 @@ export async function main(ns) {
         }
         for (var i = 0; i < maxNodes; i++) {
             for (var o = (needsNode ? 3 : 0); o < options.length; o++) {
-                var allowancePercentage = 0.00001;
+                // var allowancePercentage = 0.00001;
+                var allowancePercentage = 0.02;
                 var playerMoney = ns.getServerMoneyAvailable("home");
                 var costOfThing = 0;
                 switch(o) {
