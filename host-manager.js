@@ -41,7 +41,7 @@ function tryToBuyBestServerPossible(ns) {
     }
     
     // if the server is crappier than home don't bother.
-    // var maxRamPossibleToBuy = Math.pow(2, exponentLevel);
+    var maxRamPossibleToBuy = Math.pow(2, exponentLevel);
     // if (maxRamPossibleToBuy < ns.getServerRam("home")[0] && maxRamPossibleToBuy < Math.pow(2, maxPurchasedServerRamExponent) ) {
     //     return "";
     // }

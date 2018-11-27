@@ -84,10 +84,10 @@ export async function main(ns) {
         {name: "host-manager.ns", shortName: "host", isLaunched: false},
         {name: "node-manager.ns", shortName: "node", isLaunched: false},
         {name: "tor-manager.ns", shortName: "tor", isLaunched: false},
-        {name: "program-manager.ns", shortName: "prog", isLaunched: false},
-        {name: "ram-manager.ns", shortName: "ram", isLaunched: false},
-        {name: "agency-manager.ns", shortName: "agent", isLaunched: false},
-        {name: "aug-manager.ns", shortName: "aug", isLaunched: false}
+        // {name: "program-manager.ns", shortName: "prog", isLaunched: false},
+        // {name: "ram-manager.ns", shortName: "ram", isLaunched: false},
+        // {name: "agency-manager.ns", shortName: "agent", isLaunched: false},
+        // {name: "aug-manager.ns", shortName: "aug", isLaunched: false}
     ];
     
     // get the name of this node

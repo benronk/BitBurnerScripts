@@ -4,13 +4,10 @@
 
 export async function main(ns) {
     const torCost = 200000;
-    var hasTorRouter = false;
     while (true) {
-        if (hasTorRouter) {
-            break;
-        }
         if (hasTor(ns)) {
-            hasTorRouter = true;
+            ns.tprint("hasTorRouter: true");
+            break;
         } else {
             if (torCost <= getPlayerMoney(ns)) {
                 ns.purchaseTor();
