@@ -162,10 +162,8 @@ async function runStartupScripts(ns) {
     var isEverythingAlreadyRunning = false;
     for (var h = 0; h < asynchronousHelpers.length; h++) {
         var helper = asynchronousHelpers[h];
-        if (!helper.isEnabled || helper.isLaunched)
-            continue;
         var scriptName = helper.name;
-        if (isAnyServerRunning(scriptName)) {
+        if (!helper.isEnabled || helper.isLaunched || isAnyServerRunning(scriptName)) {
             helper.isLaunched = true;
             continue;
         } else {
