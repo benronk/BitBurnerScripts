@@ -2,6 +2,8 @@
 // the primary reason for doing it at all is simply for netburner augs.
 
 export async function main(ns) {
+    ns.disableLog("getServerMoneyAvailable");
+    ns.disableLog("sleep");
     const hn = ns.hacknet;
     var options = ["level", "ram", "core", "node"];
     while(true) {
@@ -33,24 +35,29 @@ export async function main(ns) {
                 }
                 
                 var shouldPurchase = playerMoney * allowancePercentage >= costOfThing;
+                costOfThing = Math.round(costOfThing);
                 if (shouldPurchase) {
                     switch(o) {
                         case 0:
                             hn.upgradeLevel(i, 1);
+                            ns.print("upgraded level n:"+i+" ("+costOfThing+")");
                             break;
                         case 1:
                             hn.upgradeRam(i, 1);
+                            ns.print("upgraded ram   n:"+i+" ("+costOfThing+")");
                             break;
                         case 2:
                             hn.upgradeCore(i, 1);
+                            ns.print("upgraded core  n:"+i+" ("+costOfThing+")");
                             break;
                         case 3:
                             hn.purchaseNode()
+                            ns.print("purchased node ("+costOfThing+")");
                             break;
                     }  
                 }
             }
         }
-        await ns.sleep(10);
+        await ns.sleep(200);
     }
 }

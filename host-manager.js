@@ -14,14 +14,22 @@ const maxPurchasedServerRamExponent = 20;
 const maxPurchasedServers = 25;
 
 export async function main(ns) {
+    ns.disableLog("getServerMoneyAvailable");
+    ns.disableLog("sleep");
+    ns.disableLog("getServerRam");
+
     while(true) {
         tryToBuyBestServerPossible(ns);
-        await ns.sleep(200);
+        await ns.sleep(1000);
     }
 }
 
 // buy a mess of servers
 async function buyDaemonHosts(ns) {
+    ns.disableLog("getServerMoneyAvailable");
+    ns.disableLog("sleep");
+    ns.disableLog("getServerRam");
+    
     while(tryToBuyBestServerPossible(ns) !== "") {
         // NOOP
         await ns.sleep(200);
@@ -42,9 +50,9 @@ function tryToBuyBestServerPossible(ns) {
     
     // if the server is crappier than home don't bother.
     var maxRamPossibleToBuy = Math.pow(2, exponentLevel);
-    // if (maxRamPossibleToBuy < ns.getServerRam("home")[0] && maxRamPossibleToBuy < Math.pow(2, maxPurchasedServerRamExponent) ) {
-    //     return "";
-    // }
+    if (maxRamPossibleToBuy < ns.getServerRam("home")[0] && maxRamPossibleToBuy < Math.pow(2, maxPurchasedServerRamExponent) ) {
+        return "";
+    }
     
     // check to make sure we have room in our server farm.
     var existingServers = ns.getPurchasedServers();
@@ -111,7 +119,7 @@ function tryToBuyBestServerPossible(ns) {
     if (currentMoney < cost)
         return "";
     
-    var purchasedServer = ns.purchaseServer("daemon", maxRamPossibleToBuy);
+    var purchasedServer = ns.purchaseServer("psrv", maxRamPossibleToBuy);
     
     return purchasedServer;
 }
