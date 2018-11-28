@@ -72,12 +72,17 @@ var bitnodeWeakenMult = null;
 
 // script entry point
 export async function main(ns) {
+    ns.disableLog("getServerRequiredHackingLevel");
+    ns.disableLog("getServerNumPortsRequired");
+    ns.disableLog("getServerMinSecurityLevel");
     ns.disableLog("getServerMoneyAvailable");
     ns.disableLog("getServerSecurityLevel");
+    ns.disableLog("getServerMaxMoney");
     ns.disableLog("getServerGrowth");
     ns.disableLog("getHackingLevel");
     ns.disableLog("getServerRam");
     ns.disableLog("sleep");
+    ns.disableLog("scan");
 
     // reset a bunch of stuff, hoping this fixes reset issues.
     serverListRam = [];
