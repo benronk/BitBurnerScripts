@@ -259,16 +259,16 @@ function establishMultipliers(ns) {
 
 function buildToolkit(ns) {
     var toolNames = [
-        {name: "weak-target.ns", shortName: "weak"},
-        {name: "grow-target.ns", shortName: "grow"},
-        {name: "hack-target.ns", shortName: "hack"},
-        {name: "host-manager.ns", shortName: "host"},
-        {name: "node-manager.ns", shortName: "node"},
-        {name: "tor-manager.ns", shortName: "tor"},
-        {name: "program-manager.ns", shortName: "prog"},
-        {name: "ram-manager.ns", shortName: "ram"},
-        {name: "agency-manager.ns", shortName: "agent"},
-        {name: "aug-manager.ns", shortName: "aug"}
+        {name: "weak-target.ns",     shortName: "weak", tSpread: true},
+        {name: "grow-target.ns",     shortName: "grow", tSpread: false},
+        {name: "hack-target.ns",     shortName: "hack", tSpread: false},
+        {name: "host-manager.ns",    shortName: "host", tSpread: false},
+        {name: "node-manager.ns",    shortName: "node", tSpread: false},
+        {name: "tor-manager.ns",     shortName: "tor",  tSpread: false},
+        {name: "program-manager.ns", shortName: "prog", tSpread: false},
+        {name: "ram-manager.ns",     shortName: "ram",  tSpread: false},
+        {name: "agency-manager.ns",  shortName: "agent",tSpread: false},
+        {name: "aug-manager.ns",     shortName: "aug",  tSpread: false}
     ];
     for (var i = 0; i < toolNames.length; i++) {
         var helper = toolNames[i];
@@ -280,7 +280,7 @@ function buildToolkit(ns) {
             canRun: function(server) {
                 return doesServerHaveFile(this.instance, this.name, server.name) && server.ramAvailable() >= this.cost;
             },
-            isThreadSpreadingAllowed: function() { return this.shortName === "weak"; },
+            isThreadSpreadingAllowed: helper.tSpread,
             getMaxThreads: function() {                
                 // analyzes the daemon servers array and figures about how many threads can be spooled up across all of them.
                 var maxThreads = 0;
@@ -291,7 +291,7 @@ function buildToolkit(ns) {
                     if (!daemonServer.hasRoot())
                         continue;
                     var threadsHere = Math.floor(daemonServer.ramAvailable() / this.cost);
-                    if (!this.isThreadSpreadingAllowed())
+                    if (!this.isThreadSpreadingAllowed)
                         return threadsHere;
                     maxThreads += threadsHere;
                 }
