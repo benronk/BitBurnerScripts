@@ -72,6 +72,18 @@ var bitnodeWeakenMult = null;
 
 // script entry point
 export async function main(ns) {
+    ns.disableLog("getServerRequiredHackingLevel");
+    ns.disableLog("getServerNumPortsRequired");
+    ns.disableLog("getServerMinSecurityLevel");
+    ns.disableLog("getServerMoneyAvailable");
+    ns.disableLog("getServerSecurityLevel");
+    ns.disableLog("getServerMaxMoney");
+    ns.disableLog("getServerGrowth");
+    ns.disableLog("getHackingLevel");
+    ns.disableLog("getServerRam");
+    ns.disableLog("sleep");
+    ns.disableLog("scan");
+
     // reset a bunch of stuff, hoping this fixes reset issues.
     serverListRam = [];
     serverListMoney = [];
@@ -94,15 +106,19 @@ export async function main(ns) {
     daemonHost = ns.getHostname();
     
     // create the exhaustive server list
+    ns.print("building server list...");
     await buildServerList(ns);
     
     // build port cracking array
+    ns.print("building port cracking array...");
     buildPortCrackingArray(ns);
     
     // build toolkit
+    ns.print("building toolkits...");
     buildToolkit(ns);
     
     // figure out the various bitnode and player multipliers
+    ns.print("establishing multipliers...");
     establishMultipliers(ns);
     
     // the actual worker processes live here
