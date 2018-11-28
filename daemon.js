@@ -269,7 +269,7 @@ function buildToolkit(ns) {
             canRun: function(server) {
                 return doesServerHaveFile(this.instance, this.name, server.name) && server.ramAvailable() >= this.cost;
             },
-            isThreadSpreadingAllowed: function() { return this.shortName() === "weak"; },
+            isThreadSpreadingAllowed: function() { return this.shortName === "weak"; },
             getMaxThreads: function() {                
                 // analyzes the daemon servers array and figures about how many threads can be spooled up across all of them.
                 var maxThreads = 0;
