@@ -81,13 +81,13 @@ export async function main(ns) {
 
     // some ancillary scripts that run asynchronously, we utilize the startup/execute capabilities of this daemon to run when able
      asynchronousHelpers = [
-        {name: "host-manager.ns",    shortName: "host",  isLaunched: false, isEnabled: true},
-        {name: "node-manager.ns",    shortName: "node",  isLaunched: false, isEnabled: true},
-        {name: "tor-manager.ns",     shortName: "tor",   isLaunched: false, isEnabled: false},
-        {name: "program-manager.ns", shortName: "prog",  isLaunched: false, isEnabled: false},
-        {name: "ram-manager.ns",     shortName: "ram",   isLaunched: false, isEnabled: false},
-        {name: "agency-manager.ns",  shortName: "agent", isLaunched: false, isEnabled: false},
-        {name: "aug-manager.ns",     shortName: "aug",   isLaunched: false, isEnabled: false}
+        {name: "host-manager.ns",    shortName: "host",  isEnabled: true,  isLaunched: false},
+        {name: "node-manager.ns",    shortName: "node",  isEnabled: true,  isLaunched: false},
+        {name: "tor-manager.ns",     shortName: "tor",   isEnabled: false, isLaunched: false},
+        {name: "program-manager.ns", shortName: "prog",  isEnabled: false, isLaunched: false},
+        {name: "ram-manager.ns",     shortName: "ram",   isEnabled: false, isLaunched: false},
+        {name: "agency-manager.ns",  shortName: "agent", isEnabled: false, isLaunched: false},
+        {name: "aug-manager.ns",     shortName: "aug",   isEnabled: false, isLaunched: false}
     ];
     
     // get the name of this node
@@ -258,9 +258,20 @@ function establishMultipliers(ns) {
 }
 
 function buildToolkit(ns) {
-    // var toolNames = ["weak-target.ns", "grow-target.ns", "hack-target.ns", "host-manager.ns", "node-manager.ns", "tor-manager.ns", "program-manager.ns", "ram-manager.ns", "agency-manager.ns", "aug-manager.ns"];
-    for (var i = 0; i < asynchronousHelpers.length; i++) {
-        var helper = asynchronousHelpers[i];
+    var toolNames = [
+        {name: "weak-target.ns", shortName: "weak"},
+        {name: "grow-target.ns", shortName: "grow"},
+        {name: "hack-target.ns", shortName: "hack"},
+        {name: "host-manager.ns", shortName: "host"},
+        {name: "node-manager.ns", shortName: "node"},
+        {name: "tor-manager.ns", shortName: "tor"},
+        {name: "program-manager.ns", shortName: "prog"},
+        {name: "ram-manager.ns", shortName: "ram"},
+        {name: "agency-manager.ns", shortName: "agent"},
+        {name: "aug-manager.ns", shortName: "aug"}
+    ];
+    for (var i = 0; i < toolNames.length; i++) {
+        var helper = toolNames[i];
         var tool = {
             instance: ns,
             name: helper.name,
@@ -289,7 +300,6 @@ function buildToolkit(ns) {
         }
         tools.push(tool);
     }
-    ns.tprint("tools: "+tools);
 }
 
 function doesServerHaveFile(ns, fileName, serverName) {
