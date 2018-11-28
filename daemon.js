@@ -81,13 +81,13 @@ export async function main(ns) {
 
     // some ancillary scripts that run asynchronously, we utilize the startup/execute capabilities of this daemon to run when able
      asynchronousHelpers = [
-        {name: "host-manager.ns", shortName: "host", isLaunched: false},
-        {name: "node-manager.ns", shortName: "node", isLaunched: false},
-        {name: "tor-manager.ns", shortName: "tor", isLaunched: false},
-        // {name: "program-manager.ns", shortName: "prog", isLaunched: false},
-        // {name: "ram-manager.ns", shortName: "ram", isLaunched: false},
-        // {name: "agency-manager.ns", shortName: "agent", isLaunched: false},
-        // {name: "aug-manager.ns", shortName: "aug", isLaunched: false}
+        {name: "host-manager.ns",    shortName: "host",  isLaunched: false, isEnabled: true},
+        {name: "node-manager.ns",    shortName: "node",  isLaunched: false, isEnabled: true},
+        {name: "tor-manager.ns",     shortName: "tor",   isLaunched: false, isEnabled: false},
+        {name: "program-manager.ns", shortName: "prog",  isLaunched: false, isEnabled: false},
+        {name: "ram-manager.ns",     shortName: "ram",   isLaunched: false, isEnabled: false},
+        {name: "agency-manager.ns",  shortName: "agent", isLaunched: false, isEnabled: false},
+        {name: "aug-manager.ns",     shortName: "aug",   isLaunched: false, isEnabled: false}
     ];
     
     // get the name of this node
@@ -146,7 +146,7 @@ async function runStartupScripts(ns) {
     var isEverythingAlreadyRunning = false;
     for (var h = 0; h < asynchronousHelpers.length; h++) {
         var helper = asynchronousHelpers[h];
-        if (helper.isLaunched)
+        if (!helper.isEnabled || helper.isLaunched)
             continue;
         var scriptName = helper.name;
         if (isAnyServerRunning(scriptName)) {
@@ -182,7 +182,8 @@ async function doTargetingLoop(ns) {
         
         // run some auxilliary processes that ease the ram burden of this daemon
         // and add additional functionality (like managing hacknet or buying servers)
-        if (!isHelperListLaunched) {            
+        if (!isHelperListLaunched) {
+            ns.print("starting helper scripts...");
             isHelperListLaunched = await runStartupScripts(ns);
         }
         
@@ -257,37 +258,14 @@ function establishMultipliers(ns) {
 }
 
 function buildToolkit(ns) {
-    var toolNames = ["weak-target.ns", "grow-target.ns", "hack-target.ns", "host-manager.ns", "node-manager.ns", "tor-manager.ns", "program-manager.ns", "ram-manager.ns", "agency-manager.ns", "aug-manager.ns"];
-    for (var i = 0; i < toolNames.length; i++) {
+    // var toolNames = ["weak-target.ns", "grow-target.ns", "hack-target.ns", "host-manager.ns", "node-manager.ns", "tor-manager.ns", "program-manager.ns", "ram-manager.ns", "agency-manager.ns", "aug-manager.ns"];
+    for (var i = 0; i < asynchronousHelpers.length; i++) {
+        var helper = asynchronousHelpers[i];
         var tool = {
             instance: ns,
-            name: toolNames[i],
-            cost: ns.getScriptRam(toolNames[i], daemonHost),
-            // I like short names. 
-            shortName: function() {
-                switch (this.name) {
-                    case "weak-target.ns":
-                        return "weak";
-                    case "grow-target.ns":
-                        return "grow";
-                    case "hack-target.ns":
-                        return "hack";
-                    case "host-manager.ns":
-                        return "host";
-                    case "node-manager.ns":
-                        return "node";
-                    case "tor-manager.ns":
-                        return "tor";
-                    case "program-manager.ns":
-                        return "prog";
-                    case "ram-manager.ns":
-                        return "ram";
-                    case "agency-manager.ns":
-                        return "agent";
-                    case "aug-manager.ns":
-                        return "aug";
-                }
-            },       
+            name: helper.name,
+            cost: ns.getScriptRam(helper.name, daemonHost),
+            shortName: helper.shortName,       
             canRun: function(server) {
                 return doesServerHaveFile(this.instance, this.name, server.name) && server.ramAvailable() >= this.cost;
             },
@@ -311,6 +289,7 @@ function buildToolkit(ns) {
         }
         tools.push(tool);
     }
+    ns.tprint("tools: "+tools);
 }
 
 function doesServerHaveFile(ns, fileName, serverName) {
@@ -598,7 +577,7 @@ function getScheduleTiming(ns, fromDate, currentTarget, batchNumber) {
 
 function getTool(s) {
     for (var i = 0; i < tools.length; i++) {
-        if (tools[i].shortName() == s) {
+        if (tools[i].shortName == s) {
             return tools[i];
         }
     }
